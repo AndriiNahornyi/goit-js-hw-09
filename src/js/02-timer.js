@@ -27,33 +27,72 @@
 // Для відображення повідомлень користувачеві, замість window.alert(), використовуй бібліотеку notiflix.
 // Import described in the library 'flatpickr'
 import flatpickr from "flatpickr";
-// Optional import
-// import Notiflix from 'notiflix';
 // Additional styles import
 import "flatpickr/dist/flatpickr.min.css";
+// Optional import
+import Notiflix from 'notiflix';
 // Variables
 const inputRef = document.querySelector('#datetime-picker');
 const btnStart = document.querySelector('button[data-start]');
 const timerDaysRef = document.querySelector('span[data-days]');
 const timerHoursRef = document.querySelector('span[data-hours]');
-const timeMinutesRef = document.querySelector('span[data-minutes]');
+const timerMinutesRef = document.querySelector('span[data-minutes]');
 const timerSecondsRef = document.querySelector('span[data-seconds]');
+let selectedTimeMs = null;
+let timerInterval;
 btnStart.disabled = true;
-// Listeners
-// btnStart.addEventListener('click', onBtnStartClick)
-// Functions
-// function (onBtnStartClick) {  
-// }
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDates) {
-    console.log(selectedDates[0]);
+  onOpen() {
+    timerInterval && clearInterval(timerInterval);
+    updateTimer();
   },
+  onClose(selectedDates) {
+    if (selectedDates[0] < new Date()) {
+      // alert('Please choose a date in the future');
+      // Optional: replaced alert
+      Notiflix.Notify.failure('Please choose a date in the future');
+    } else {
+      btnStart.disabled = false;
+      selectedTimeMs = selectedDates[0].getTime();
+      console.log(selectedTimeMs);
+    }
+  }
 };
-
+let selectedDay = flatpickr(inputRef, options);
+// Listeners
+btnStart.addEventListener('click', onBtnStartClick);
+// Functions
+function updateTimer({ days = '00', hours = '00', minutes = '00', seconds = '00' } = {
+}) {
+  timerDaysRef.textContent = addLeadingZero(days);
+  timerHoursRef.textContent = addLeadingZero(hours);
+  timerMinutesRef.textContent = addLeadingZero(minutes);
+  timerSecondsRef.textContent = addLeadingZero(seconds);
+}
+function onBtnStartClick(event) {
+  btnStart.disabled = true;
+  let deltaTime = selectedTimeMs - Date.now();
+  // console.log(deltaTime);
+  // Виводимо timer
+  timerInterval = setInterval(() => {
+  const time = convertMs(deltaTime);
+  updateTimer(time);
+  deltaTime -= 1000;
+  if (deltaTime < 1000) {
+    clearInterval(timerInterval);
+  }
+  }, 1000
+  )
+}
+// function: приведення часу до 2 знаків, якщо менше додає попереду 0
+function addLeadingZero(value) {
+return String(value).padStart(2, '0');
+}
+// З умови
 function convertMs(ms) {
 //   Number of milliseconds per unit of time
   const second = 1000;
