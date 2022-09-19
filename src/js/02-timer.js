@@ -18,19 +18,16 @@
 // НЕ БУДЕМО УСКЛАДНЮВАТИ: Якщо таймер запущений, для того щоб вибрати нову дату і перезапустити його - необхідно перезавантажити сторінку.
 // Для підрахунку значень використовуй готову функцію convertMs, де ms - різниця між кінцевою і поточною датою в мc.
 // function convertMs(ms) {contained in the task condition}
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 // Форматування часу
 // Функція convertMs() повертає об'єкт з розрахованим часом, що залишився до кінцевої дати. Зверни увагу, що вона не форматує результат. Тобто, якщо залишилося 4 хвилини або будь-якої іншої складової часу, то функція поверне 4, а не 04. В інтерфейсі таймера необхідно додавати 0, якщо в числі менше двох символів. Напиши функцію addLeadingZero(value), яка використовує метод padStart() і перед рендерингом інтефрейсу форматує значення.
-// Опціонально: Бібліотека повідомлень
-// Для відображення повідомлень користувачеві, замість window.alert(), використовуй бібліотеку notiflix.
+// Опціонально: Бібліотека повідомлень. Для відображення повідомлень користувачеві, замість window.alert(), використовуй бібліотеку notiflix.
 // Import described in the library 'flatpickr'
 import flatpickr from "flatpickr";
 // Additional styles import
 import "flatpickr/dist/flatpickr.min.css";
 // Optional import
 import Notiflix from 'notiflix';
+
 // Variables
 const inputRef = document.querySelector('#datetime-picker');
 const btnStart = document.querySelector('button[data-start]');
@@ -40,7 +37,9 @@ const timerMinutesRef = document.querySelector('span[data-minutes]');
 const timerSecondsRef = document.querySelector('span[data-seconds]');
 let selectedTimeMs = null;
 let timerInterval;
+
 btnStart.disabled = true;
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -62,9 +61,12 @@ const options = {
     }
   }
 };
+
 let selectedDay = flatpickr(inputRef, options);
+
 // Listeners
 btnStart.addEventListener('click', onBtnStartClick);
+
 // Functions
 function updateTimer({ days = '00', hours = '00', minutes = '00', seconds = '00' } = {
 }) {
@@ -73,6 +75,7 @@ function updateTimer({ days = '00', hours = '00', minutes = '00', seconds = '00'
   timerMinutesRef.textContent = addLeadingZero(minutes);
   timerSecondsRef.textContent = addLeadingZero(seconds);
 }
+
 function onBtnStartClick(event) {
   btnStart.disabled = true;
   let deltaTime = selectedTimeMs - Date.now();
@@ -88,10 +91,12 @@ function onBtnStartClick(event) {
   }, 1000
   )
 }
+
 // function: приведення часу до 2 знаків, якщо менше додає попереду 0
 function addLeadingZero(value) {
 return String(value).padStart(2, '0');
 }
+
 // З умови
 function convertMs(ms) {
 //   Number of milliseconds per unit of time
