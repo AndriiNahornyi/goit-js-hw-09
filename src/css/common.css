@@ -16,3 +16,23 @@ img {
   display: block;
   max-width: 100%;
 }
+/* input#datetime-picker {} */
+/* button {}  */
+/* .field {} */
+.timer {
+  display: flex;
+  margin-top: 15px;
+  gap: 10px;
+} 
+.value {
+  display: flex;
+  justify-content: center;
+  border: 2px solid gray;
+  background-color: yellowgreen;
+  color: teal;
+} 
+.label {
+  border: 2px solid gray;
+  background-color:tomato;
+  color: teal;
+} 
