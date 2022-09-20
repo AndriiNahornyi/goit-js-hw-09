@@ -20,16 +20,25 @@ btnStart.addEventListener('click', onBtnStartClick);
 btnStop.addEventListener('click', onBtnStopClick);
 // Functions
 let timerId = null;
+
+function btnStatus(activeBtn, disabledBtn) {
+    disabledBtn.disabled = true;
+    activeBtn.disabled = false;
+}
+
 function onBtnStartClick() {
-    btnStart.disabled = true;
-    btnStop.disabled = false;
+    // btnStart.disabled = true;
+    // btnStop.disabled = false;
+    btnStatus(btnStop, btnStart);
     timerId = setInterval(() => {
         const bodyColor = getRandomHexColor();
         body.style.background = bodyColor;
     }, 1000);
 }
+
 function onBtnStopClick() {
-    btnStart.disabled = false;
-    btnStop.disabled = true; 
+    // btnStart.disabled = false;
+    // btnStop.disabled = true; 
     clearInterval(timerId);
+    btnStatus(btnStart, btnStop);
 }
